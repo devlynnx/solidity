@@ -270,12 +270,7 @@ bool ASTJSONTest::runTest(
 			"Expected result" <<
 			(!_variant.name().empty() ? " (" + _variant.name() + "):" : ":") <<
 			endl;
-		{
-			istringstream stream(_variant.expectation);
-			string line;
-			while (getline(stream, line))
-				_stream << nextIndentLevel << line << endl;
-		}
+		printPrefixed(_stream, _variant.expectation, nextIndentLevel);
 		_stream << endl;
 
 		AnsiColorized(_stream, _formatted, {BOLD, CYAN}) <<
@@ -283,12 +278,7 @@ bool ASTJSONTest::runTest(
 			"Obtained result" <<
 			(!_variant.name().empty() ? " (" + _variant.name() + "):" : ":") <<
 			endl;
-		{
-			istringstream stream(_variant.result);
-			string line;
-			while (getline(stream, line))
-				_stream << nextIndentLevel << line << endl;
-		}
+		printPrefixed(_stream, _variant.result, nextIndentLevel);
 		_stream << endl;
 		return false;
 	}
@@ -301,11 +291,8 @@ void ASTJSONTest::printSource(ostream& _stream, string const& _linePrefix, bool 
 	for (auto const& source: m_sources)
 	{
 		if (m_sources.size() > 1 || source.first != "a")
-			_stream << _linePrefix << sourceDelimiter << source.first << " ====" << endl << endl;
-		stringstream stream(source.second);
-		string line;
-		while (getline(stream, line))
-			_stream << _linePrefix << line << endl;
+			printPrefixed(_stream, sourceDelimiter + source.first + " ====\n", _linePrefix);
+		printPrefixed(_stream, source.second, _linePrefix);
 		_stream << endl;
 	}
 }
