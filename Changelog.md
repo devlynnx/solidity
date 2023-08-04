@@ -5,6 +5,7 @@ Language Features:
 
 Compiler Features:
  * Yul Optimizer: If ``PUSH0`` is supported, favor zero literals over storing zero values in variables.
+ * Yul Optimizer: Run the ``Rematerializer`` and ``UnusedPruner`` steps at the end of the default clean-up sequence.
 
 
 Bugfixes:
