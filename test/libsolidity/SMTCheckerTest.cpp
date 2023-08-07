@@ -127,11 +127,11 @@ SMTCheckerTest::SMTCheckerTest(string const& _filename): SyntaxTest(_filename, E
 	m_modelCheckerSettings.bmcLoopIterations = std::optional<unsigned>{bmcLoopIterations};
 }
 
-void SMTCheckerTest::setupCompiler()
+void SMTCheckerTest::setupCompiler(CompilerStack& _compiler)
 {
-	SyntaxTest::setupCompiler();
+	SyntaxTest::setupCompiler(_compiler);
 
-	compiler().setModelCheckerSettings(m_modelCheckerSettings);
+	_compiler.setModelCheckerSettings(m_modelCheckerSettings);
 }
 
 void SMTCheckerTest::filterObtainedErrors()

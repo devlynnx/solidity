@@ -37,13 +37,16 @@ using namespace solidity::frontend;
 using namespace solidity::frontend::test;
 using namespace yul;
 
+void MemoryGuardTest::setupCompiler(CompilerStack& _compiler)
+{
+
+	_compiler.setViaIR(true);
+	_compiler.setOptimiserSettings(OptimiserSettings::none());
+}
+
 TestCase::TestResult MemoryGuardTest::run(ostream& _stream, string const& _linePrefix, bool _formatted)
 {
-	compiler().reset();
-	compiler().setSources(StringMap{{"", m_source}});
-	compiler().setViaIR(true);
-	compiler().setOptimiserSettings(OptimiserSettings::none());
-	if (!compiler().compile())
+	if (!runFramework(m_source, PipelineStage::Compilation))
 	{
 		_stream << formatErrors(filteredErrors(), _formatted);
 		return TestResult::FatalError;
