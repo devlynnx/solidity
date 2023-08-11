@@ -27,6 +27,11 @@
 #include <libyul/backends/evm/ControlFlowGraph.h>
 #include <libsolutil/Visitor.h>
 
+#include <range/v3/algorithm.hpp>
+#include <range/v3/view/drop.hpp>
+#include <range/v3/view/reverse.hpp>
+#include <range/v3/view/transform.hpp>
+
 #include <deque>
 #include <map>
 #include <vector>
@@ -117,8 +122,8 @@ public:
 		solAssert(!m_immediateDominator.empty());
 
 		//Ignoring the entry node since no one dominates it.
-		for (size_t i = 1; i < m_immediateDominator.size(); ++i)
-			m_dominatorTree[m_immediateDominator[i]].emplace_back(i);
+		for (size_t idomIdx: m_immediateDominator | ranges::views::drop(1))
+			m_dominatorTree[idomIdx].emplace_back(idomIdx);
 	}
 
 	// Path compression updates the ancestors of vertices along
@@ -177,6 +182,8 @@ public:
 			return _v;
 		};
 
+		auto toIdx = [&](Vertex const& v) { return m_vertexIndex[v]; };
+
 		// step 1
 		std::set<Vertex> visited;
 		// predecessors(w): The set of vertices ``v`` such that (``v``, ``w``) is an edge of the graph.
@@ -210,9 +217,8 @@ public:
 		dfs(_entry, dfs);
 
 		// Process the vertices in decreasing order of the dfs number
-		for (auto it = m_vertex.rbegin(); it != m_vertex.rend(); ++it)
+		for (size_t w: m_vertex | ranges::views::reverse | ranges::views::transform(toIdx))
 		{
-			Vertex const& w = m_vertexIndex[*it];
 			// step 3
 			// NOTE: this is an optimization, i.e. performing the step 3 before step 2.
 			// The goal is to process the bucket in the beginning of the loop for the vertex ``w``
@@ -220,9 +226,8 @@ public:
 			// Inverting those steps ensures that a bucket is only processed once and
 			// it does not need to be erased.
 			// The optimization proposal is available here: https://jgaa.info/accepted/2006/GeorgiadisTarjanWerneck2006.10.1.pdf pg.77
-			for_each(
-				bucket[w].begin(),
-				bucket[w].end(),
+			ranges::for_each(
+				bucket[w],
 				[&](size_t v)
 				{
 					size_t u = eval(v);
@@ -243,12 +248,10 @@ public:
 
 		// step 4
 		idom[0] = 0;
-		for (auto it = m_vertex.begin() + 1; it != m_vertex.end(); ++it)
-		{
-			size_t w = m_vertexIndex[*it];
+		for (size_t w: m_vertex | ranges::views::drop(1) | ranges::views::transform(toIdx))
 			if (idom[w] != semi[w])
 				idom[w] = idom[idom[w]];
-		}
+
 		return idom;
 	}
 private:
