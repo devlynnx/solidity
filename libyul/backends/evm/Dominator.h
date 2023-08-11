@@ -95,7 +95,7 @@ public:
 	// @note for a vertex ``_v``, the _v’s inclusion in the set of dominators of ``_v`` is implicit.
 	std::vector<Vertex> dominatorsOf(Vertex _v)
 	{
-		assert(m_vertex.size() > 0);
+		solAssert(m_vertex.size() > 0);
 		// The entry node always dominates all other nodes
 		std::vector<Vertex> dominators = std::vector<Vertex>{m_vertex[0]};
 
@@ -112,8 +112,8 @@ public:
 	}
 
 	void buildDominatorTree() {
-		assert(m_vertex.size() > 0);
-		assert(m_immediateDominator.size() > 0);
+		solAssert(m_vertex.size() > 0);
+		solAssert(m_immediateDominator.size() > 0);
 
 		//Ignoring the entry node since no one dominates it.
 		for (size_t i = 1; i < m_immediateDominator.size(); ++i)
@@ -129,7 +129,7 @@ public:
 		size_t _v
 	)
 	{
-		assert(_ancestor[_v] != std::numeric_limits<size_t>::max());
+		solAssert(_ancestor[_v] != std::numeric_limits<size_t>::max());
 		size_t u = _ancestor[_v];
 		if (_ancestor[u] != std::numeric_limits<size_t>::max())
 		{
@@ -142,7 +142,7 @@ public:
 
 	std::vector<size_t> lengauerTarjanDominator(Vertex _entry, size_t numVertices)
 	{
-		assert(numVertices > 0);
+		solAssert(numVertices > 0);
 		// semi(w): The dfs index of the semidominator of ``w``.
 		std::vector<size_t> semi(numVertices, std::numeric_limits<size_t>::max());
 		// parent(w): The index of the vertex which is the parent of ``w`` in the spanning

@@ -16,6 +16,8 @@
  */
 #include <libyul/backends/evm/Dominator.h>
 
+#include <test/libsolidity/util/SoltestErrors.h>
+
 #include <boost/test/unit_test.hpp>
 
 using namespace solidity::yul;
@@ -64,14 +66,14 @@ protected:
         std::map<std::string, size_t> _expectedDFSIndices
     )
     {
-        assert(_edges.size() > 0);
+        soltestAssert(_edges.size() > 0);
 
         ImmediateDominatorTest* graph = new ImmediateDominatorTest();
         for (std::string v: _vertices)
             graph->vertices.insert(make_pair(v, new Vertex{v, std::vector<Vertex*>{}}));
         graph->entry = graph->vertices[_vertices[0]];
 
-        assert(_vertices.size() > 0 && _vertices.size() == graph->vertices.size());
+        soltestAssert(_vertices.size() > 0 && _vertices.size() == graph->vertices.size());
 
         graph->numVertices = _vertices.size();
         for (auto [from, to]: _edges)
