@@ -27,10 +27,10 @@
 #include <libyul/backends/evm/ControlFlowGraph.h>
 #include <libsolutil/Visitor.h>
 
-#include <vector>
-#include <map>
-#include <set>
 #include <deque>
+#include <map>
+#include <vector>
+#include <set>
 
 namespace solidity::yul
 {
