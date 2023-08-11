@@ -95,7 +95,7 @@ public:
 	// @note for a vertex ``_v``, the _v’s inclusion in the set of dominators of ``_v`` is implicit.
 	std::vector<Vertex> dominatorsOf(Vertex _v)
 	{
-		solAssert(m_vertex.size() > 0);
+		solAssert(!m_vertex.empty());
 		// The entry node always dominates all other nodes
 		std::vector<Vertex> dominators = std::vector<Vertex>{m_vertex[0]};
 
@@ -112,8 +112,8 @@ public:
 	}
 
 	void buildDominatorTree() {
-		solAssert(m_vertex.size() > 0);
-		solAssert(m_immediateDominator.size() > 0);
+		solAssert(!m_vertex.empty());
+		solAssert(!m_immediateDominator.empty());
 
 		//Ignoring the entry node since no one dominates it.
 		for (size_t i = 1; i < m_immediateDominator.size(); ++i)

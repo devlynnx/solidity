@@ -69,14 +69,14 @@ protected:
 		std::map<std::string, size_t> _expectedDFSIndices
 	)
 	{
-		soltestAssert(_edges.size() > 0);
+		soltestAssert(!_edges.empty());
 
 		ImmediateDominatorTest* test = new ImmediateDominatorTest();
 		for (std::string name: _vertices)
 			test->vertices.insert(make_pair(name, new Vertex{name, std::vector<Vertex*>{}}));
 		test->entry = test->vertices[_vertices[0]];
 
-		soltestAssert(_vertices.size() > 0 && _vertices.size() == test->vertices.size());
+		soltestAssert(!_vertices.empty() && _vertices.size() == test->vertices.size());
 
 		test->numVertices = _vertices.size();
 		for (auto const& [from, to]: _edges)
