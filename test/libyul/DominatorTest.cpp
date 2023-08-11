@@ -71,20 +71,20 @@ protected:
 	{
 		soltestAssert(_edges.size() > 0);
 
-		ImmediateDominatorTest* graph = new ImmediateDominatorTest();
-		for (std::string v: _vertices)
-			graph->vertices.insert(make_pair(v, new Vertex{v, std::vector<Vertex*>{}}));
-		graph->entry = graph->vertices[_vertices[0]];
+		ImmediateDominatorTest* test = new ImmediateDominatorTest();
+		for (std::string name: _vertices)
+			test->vertices.insert(make_pair(name, new Vertex{name, std::vector<Vertex*>{}}));
+		test->entry = test->vertices[_vertices[0]];
 
-		soltestAssert(_vertices.size() > 0 && _vertices.size() == graph->vertices.size());
+		soltestAssert(_vertices.size() > 0 && _vertices.size() == test->vertices.size());
 
-		graph->numVertices = _vertices.size();
+		test->numVertices = _vertices.size();
 		for (auto const& [from, to]: _edges)
-			graph->vertices[from]->successors.push_back(graph->vertices[to]);
+			test->vertices[from]->successors.push_back(test->vertices[to]);
 
-		graph->expectedIdom = _expectedIdom;
-		graph->expectedDFSIndices = _expectedDFSIndices;
-		return graph;
+		test->expectedIdom = _expectedIdom;
+		test->expectedDFSIndices = _expectedDFSIndices;
+		return test;
 	}
 
 	std::map<std::string, size_t> toDFSIndices(std::map<Vertex, size_t> const& _vertexIndices)
