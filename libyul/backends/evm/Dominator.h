@@ -40,7 +40,7 @@ class Dominator
 {
 public:
 
-	Dominator(Vertex _entry, size_t _numVertices):
+	Dominator(Vertex const& _entry, size_t _numVertices):
 		m_vertex(_numVertices),
 		m_immediateDominator(lengauerTarjanDominator(_entry, _numVertices))
 	{
@@ -71,7 +71,7 @@ public:
 	// through the path from ``_b`` to the entry node.
 	// If ``_a`` is found, then it dominates ``_b``
 	// otherwise it doesn't.
-	bool dominates(Vertex _a, Vertex _b)
+	bool dominates(Vertex const& _a, Vertex const& _b)
 	{
 		size_t aIdx = m_vertexIndex[_a];
 		size_t bIdx = m_vertexIndex[_b];
@@ -93,7 +93,7 @@ public:
 
 	// Find all dominators of a node _v
 	// @note for a vertex ``_v``, the _v’s inclusion in the set of dominators of ``_v`` is implicit.
-	std::vector<Vertex> dominatorsOf(Vertex _v)
+	std::vector<Vertex> dominatorsOf(Vertex const& _v)
 	{
 		solAssert(!m_vertex.empty());
 		// The entry node always dominates all other nodes
@@ -141,7 +141,7 @@ public:
 		}
 	}
 
-	std::vector<size_t> lengauerTarjanDominator(Vertex _entry, size_t numVertices)
+	std::vector<size_t> lengauerTarjanDominator(Vertex const& _entry, size_t numVertices)
 	{
 		solAssert(numVertices > 0);
 		// semi(w): The dfs index of the semidominator of ``w``.
@@ -189,7 +189,7 @@ public:
 		// The number of vertices reached during the dfs.
 		// The vertices are indexed based on this number.
 		size_t dfIdx = 0;
-		auto dfs = [&](Vertex _v, auto _dfs) -> void {
+		auto dfs = [&](Vertex const& _v, auto _dfs) -> void {
 			if (visited.count(_v))
 				return;
 			visited.insert(_v);
@@ -198,7 +198,7 @@ public:
 			semi[dfIdx] = dfIdx;
 			label[dfIdx] = dfIdx;
 			dfIdx++;
-			ForEachSuccessor{}(_v, [&](Vertex w) {
+			ForEachSuccessor{}(_v, [&](Vertex const& w) {
 				if (semi[dfIdx] == std::numeric_limits<size_t>::max())
 				{
 					parent[dfIdx] = m_vertexIndex[_v];
