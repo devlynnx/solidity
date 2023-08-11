@@ -463,4 +463,5 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-}
+
+} // namespace solidity::yul::test
