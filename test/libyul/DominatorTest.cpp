@@ -20,6 +20,9 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <range/v3/range/conversion.hpp>
+#include <range/v3/view/transform.hpp>
+
 using namespace solidity::yul;
 
 namespace solidity::yul::test
@@ -82,6 +85,15 @@ protected:
 		graph->expectedIdom = _expectedIdom;
 		graph->expectedDFSIndices = _expectedDFSIndices;
 		return graph;
+	}
+
+	std::map<std::string, size_t> toDFSIndices(std::map<Vertex, size_t> const& _vertexIndices)
+	{
+		auto convertIndex = [](std::pair<Vertex, size_t> const& _pair) -> std::pair<std::string, size_t>
+		{
+			return {_pair.first.name, _pair.second};
+		};
+		return _vertexIndices | ranges::views::transform(convertIndex) | ranges::to<std::map>;
 	}
 };
 
@@ -456,8 +468,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 			ImmediateDominatorTest::ForEachVertexSuccessorTest
 		> dominatorFinder(*test->entry, test->numVertices);
 
-		for (auto const&[v, idx]: dominatorFinder.vertexIndices())
-			BOOST_CHECK(test->expectedDFSIndices.at(v.name) == idx);
+		BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
 		BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
 	}
 }
