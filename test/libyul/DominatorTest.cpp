@@ -108,7 +108,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	//        │       │
 	//        └──►F◄──┘
 	inputGraph[0] = generateGraph(
-		{ "A", "B", "C", "D", "E", "F", "G", "H" },
+		{"A", "B", "C", "D", "E", "F", "G", "H"},
 		{
 			edge("A", "B"),
 			edge("B", "C"),
@@ -142,7 +142,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	//      │    │  │     │
 	//      └───►G◄─┴─────┘
 	inputGraph[1] = generateGraph(
-		{ "A", "B", "C", "D", "E", "F", "G" },
+		{"A", "B", "C", "D", "E", "F", "G"},
 		{
 			edge("A", "B"),
 			edge("B", "C"),
@@ -189,7 +189,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	//    │             │
 	//    └─────────────┘
 	inputGraph[2] = generateGraph(
-		{ "A", "B", "C", "D", "E", "F", "G", "H", "I" },
+		{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
 		{
 			edge("A", "B"),
 			edge("A", "C"),
@@ -226,7 +226,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// T. Lengauer and R. E. Tarjan pg. 122 fig. 1
 	// ref: https://www.cs.princeton.edu/courses/archive/spr03/cs423/download/dominators.pdf
 	inputGraph[3] = generateGraph(
-		{ "R", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "K" },
+		{"R", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "K"},
 		{
 			edge("R", "B"),
 			edge("R", "A"),
@@ -272,7 +272,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// pg. 12 Fig. 2.2
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
 	inputGraph[4] = generateGraph(
-		{ "R", "W", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Y" },
+		{"R", "W", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Y"},
 		{
 			edge("R", "W"),
 			edge("R", "Y"),
@@ -291,7 +291,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 			edge("X6", "X7"),
 			edge("X7", "X6")
 		},
-		{0, 0, 0, 0, 0, 0, 0, 0, 0 , 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{
 			{"R", 0},
 			{"W", 1},
@@ -310,7 +310,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// Example itworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
 	inputGraph[5] = generateGraph(
-		{ "R", "W1", "W2", "W3", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3" },
+		{"R", "W1", "W2", "W3", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			edge("R", "W1"),
 			edge("R", "X1"),
@@ -360,7 +360,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// Example idfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
 	inputGraph[6] = generateGraph(
-		{ "R", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3" },
+		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			edge("R", "X1"),
 			edge("R", "Z1"),
@@ -397,7 +397,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// Example ibfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
 	inputGraph[7] = generateGraph(
-		{ "R", "W", "X1", "X2", "X3", "Y", "Z" },
+		{"R", "W", "X1", "X2", "X3", "Y", "Z"},
 		{
 			edge("R", "W"),
 			edge("R", "Y"),
@@ -425,7 +425,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	// Example sncaworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
 	inputGraph[8] = generateGraph(
-		{ "R", "X1", "X2", "X3", "Y1", "Y2", "Y3" },
+		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3"},
 		{
 			edge("R", "X1"),
 			edge("R", "Y1"),
@@ -460,7 +460,6 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 			BOOST_CHECK(test->expectedDFSIndices.at(v.data) == idx);
 		BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
 	}
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
