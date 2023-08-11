@@ -43,7 +43,7 @@ struct ImmediateDominatorTest
 		template<typename Callable>
 		void operator()(Vertex _v, Callable&& _callable) const
 		{
-			for (auto w: _v.successors)
+			for (auto const& w: _v.successors)
 				_callable(*w);
 		}
 	};
@@ -76,7 +76,7 @@ protected:
 		soltestAssert(_vertices.size() > 0 && _vertices.size() == graph->vertices.size());
 
 		graph->numVertices = _vertices.size();
-		for (auto [from, to]: _edges)
+		for (auto const& [from, to]: _edges)
 			graph->vertices[from]->successors.push_back(graph->vertices[to]);
 
 		graph->expectedIdom = _expectedIdom;
@@ -456,7 +456,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 			ImmediateDominatorTest::ForEachVertexSuccessorTest
 		> dominatorFinder(*test->entry, test->numVertices);
 
-		for (auto [v, idx]: dominatorFinder.vertexIndices())
+		for (auto const&[v, idx]: dominatorFinder.vertexIndices())
 			BOOST_CHECK(test->expectedDFSIndices.at(v.data) == idx);
 		BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
 	}
