@@ -37,7 +37,7 @@ struct ImmediateDominatorTest
 		}
 	};
 
-	typedef std::pair<std::string, std::string> edge;
+	typedef std::pair<std::string, std::string> Edge;
 
 	struct ForEachVertexSuccessorTest {
 		template<typename Callable>
@@ -61,7 +61,7 @@ class DominatorFixture
 protected:
 	static ImmediateDominatorTest const* generateGraph(
 		std::vector<std::string> _vertices,
-		std::vector<ImmediateDominatorTest::edge> _edges,
+		std::vector<ImmediateDominatorTest::Edge> _edges,
 		std::vector<size_t> _expectedIdom,
 		std::map<std::string, size_t> _expectedDFSIndices
 	)
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_SUITE(Dominators)
 
 BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 {
-	typedef ImmediateDominatorTest::edge edge;
+	typedef ImmediateDominatorTest::Edge Edge;
 	std::vector<ImmediateDominatorTest const*> inputGraph(9);
 
 	//            A
@@ -110,15 +110,15 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[0] = generateGraph(
 		{"A", "B", "C", "D", "E", "F", "G", "H"},
 		{
-			edge("A", "B"),
-			edge("B", "C"),
-			edge("B", "D"),
-			edge("C", "D"),
-			edge("C", "G"),
-			edge("D", "E"),
-			edge("E", "F"),
-			edge("G", "H"),
-			edge("H", "F")
+			Edge("A", "B"),
+			Edge("B", "C"),
+			Edge("B", "D"),
+			Edge("C", "D"),
+			Edge("C", "G"),
+			Edge("D", "E"),
+			Edge("E", "F"),
+			Edge("G", "H"),
+			Edge("H", "F")
 		},
 		{0, 0, 1, 1, 3, 1, 2, 6},
 		{
@@ -144,16 +144,16 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[1] = generateGraph(
 		{"A", "B", "C", "D", "E", "F", "G"},
 		{
-			edge("A", "B"),
-			edge("B", "C"),
-			edge("C", "G"),
-			edge("C", "A"),
-			edge("A", "D"),
-			edge("D", "E"),
-			edge("D", "F"),
-			edge("E", "G"),
-			edge("F", "G"),
-			edge("G", "C")
+			Edge("A", "B"),
+			Edge("B", "C"),
+			Edge("C", "G"),
+			Edge("C", "A"),
+			Edge("A", "D"),
+			Edge("D", "E"),
+			Edge("D", "F"),
+			Edge("E", "G"),
+			Edge("F", "G"),
+			Edge("G", "C")
 		},
 		{0, 0, 0, 0, 0, 4, 4},
 		{
@@ -191,23 +191,23 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[2] = generateGraph(
 		{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
 		{
-			edge("A", "B"),
-			edge("A", "C"),
-			edge("B", "C"),
-			edge("B", "I"),
-			edge("B", "E"),
-			edge("C", "D"),
-			edge("D", "B"),
-			edge("E", "H"),
-			edge("E", "F"),
-			edge("F", "G"),
-			edge("F", "C"),
-			edge("G", "E"),
-			edge("G", "A"),
-			edge("G", "D"),
-			edge("H", "G"),
-			edge("I", "E"),
-			edge("I", "H")
+			Edge("A", "B"),
+			Edge("A", "C"),
+			Edge("B", "C"),
+			Edge("B", "I"),
+			Edge("B", "E"),
+			Edge("C", "D"),
+			Edge("D", "B"),
+			Edge("E", "H"),
+			Edge("E", "F"),
+			Edge("F", "G"),
+			Edge("F", "C"),
+			Edge("G", "E"),
+			Edge("G", "A"),
+			Edge("G", "D"),
+			Edge("H", "G"),
+			Edge("I", "E"),
+			Edge("I", "H")
 		},
 		{0, 0, 0, 0, 1, 1, 1, 1, 5},
 		{
@@ -228,27 +228,27 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[3] = generateGraph(
 		{"R", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "K"},
 		{
-			edge("R", "B"),
-			edge("R", "A"),
-			edge("R", "C"),
-			edge("B", "A"),
-			edge("B", "D"),
-			edge("B", "E"),
-			edge("A", "D"),
-			edge("D", "L"),
-			edge("L", "H"),
-			edge("E", "H"),
-			edge("H", "E"),
-			edge("H", "K"),
-			edge("K", "I"),
-			edge("K", "R"),
-			edge("C", "F"),
-			edge("C", "G"),
-			edge("F", "I"),
-			edge("G", "I"),
-			edge("G", "J"),
-			edge("J", "I"),
-			edge("I", "K"),
+			Edge("R", "B"),
+			Edge("R", "A"),
+			Edge("R", "C"),
+			Edge("B", "A"),
+			Edge("B", "D"),
+			Edge("B", "E"),
+			Edge("A", "D"),
+			Edge("D", "L"),
+			Edge("L", "H"),
+			Edge("E", "H"),
+			Edge("H", "E"),
+			Edge("H", "K"),
+			Edge("K", "I"),
+			Edge("K", "R"),
+			Edge("C", "F"),
+			Edge("C", "G"),
+			Edge("F", "I"),
+			Edge("G", "I"),
+			Edge("G", "J"),
+			Edge("J", "I"),
+			Edge("I", "K"),
 		},
 		{0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 9, 9, 11},
 		{
@@ -274,22 +274,22 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[4] = generateGraph(
 		{"R", "W", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Y"},
 		{
-			edge("R", "W"),
-			edge("R", "Y"),
-			edge("W", "X1"),
-			edge("Y", "X7"),
-			edge("X1", "X2"),
-			edge("X2", "X1"),
-			edge("X2", "X3"),
-			edge("X3", "X2"),
-			edge("X3", "X4"),
-			edge("X4", "X3"),
-			edge("X4", "X5"),
-			edge("X5", "X4"),
-			edge("X5", "X6"),
-			edge("X6", "X5"),
-			edge("X6", "X7"),
-			edge("X7", "X6")
+			Edge("R", "W"),
+			Edge("R", "Y"),
+			Edge("W", "X1"),
+			Edge("Y", "X7"),
+			Edge("X1", "X2"),
+			Edge("X2", "X1"),
+			Edge("X2", "X3"),
+			Edge("X3", "X2"),
+			Edge("X3", "X4"),
+			Edge("X4", "X3"),
+			Edge("X4", "X5"),
+			Edge("X5", "X4"),
+			Edge("X5", "X6"),
+			Edge("X6", "X5"),
+			Edge("X6", "X7"),
+			Edge("X7", "X6")
 		},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{
@@ -312,30 +312,30 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[5] = generateGraph(
 		{"R", "W1", "W2", "W3", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
-			edge("R", "W1"),
-			edge("R", "X1"),
-			edge("R", "Z3"),
-			edge("W1", "W2"),
-			edge("W2", "W3"),
-			edge("X1", "X2"),
-			edge("X2", "X3"),
-			edge("X3", "Y1"),
-			edge("Y1", "W1"),
-			edge("Y1", "W2"),
-			edge("Y1", "W3"),
-			edge("Y1", "Y2"),
-			edge("Y2", "W1"),
-			edge("Y2", "W2"),
-			edge("Y2", "W3"),
-			edge("Y2", "Y3"),
-			edge("Y3", "W1"),
-			edge("Y3", "W2"),
-			edge("Y3", "W3"),
-			edge("Y3", "Z1"),
-			edge("Z1", "Z2"),
-			edge("Z2", "Z1"),
-			edge("Z2", "Z3"),
-			edge("Z3", "Z2")
+			Edge("R", "W1"),
+			Edge("R", "X1"),
+			Edge("R", "Z3"),
+			Edge("W1", "W2"),
+			Edge("W2", "W3"),
+			Edge("X1", "X2"),
+			Edge("X2", "X3"),
+			Edge("X3", "Y1"),
+			Edge("Y1", "W1"),
+			Edge("Y1", "W2"),
+			Edge("Y1", "W3"),
+			Edge("Y1", "Y2"),
+			Edge("Y2", "W1"),
+			Edge("Y2", "W2"),
+			Edge("Y2", "W3"),
+			Edge("Y2", "Y3"),
+			Edge("Y3", "W1"),
+			Edge("Y3", "W2"),
+			Edge("Y3", "W3"),
+			Edge("Y3", "Z1"),
+			Edge("Z1", "Z2"),
+			Edge("Z2", "Z1"),
+			Edge("Z2", "Z3"),
+			Edge("Z3", "Z2")
 		},
 		{0, 0, 0, 0, 0, 4, 5, 6, 7, 8, 0, 0, 0},
 		{
@@ -362,21 +362,21 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[6] = generateGraph(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
-			edge("R", "X1"),
-			edge("R", "Z1"),
-			edge("X1", "Y1"),
-			edge("X1", "X2"),
-			edge("X2", "X3"),
-			edge("X2", "Y2"),
-			edge("X3", "Y3"),
-			edge("Y1", "Z1"),
-			edge("Y1", "Z2"),
-			edge("Z1", "Y1"),
-			edge("Y2", "Z2"),
-			edge("Y2", "Z3"),
-			edge("Z2", "Y2"),
-			edge("Y3", "Z3"),
-			edge("Z3", "Y3")
+			Edge("R", "X1"),
+			Edge("R", "Z1"),
+			Edge("X1", "Y1"),
+			Edge("X1", "X2"),
+			Edge("X2", "X3"),
+			Edge("X2", "Y2"),
+			Edge("X3", "Y3"),
+			Edge("Y1", "Z1"),
+			Edge("Y1", "Z2"),
+			Edge("Z1", "Y1"),
+			Edge("Y2", "Z2"),
+			Edge("Y2", "Z3"),
+			Edge("Z2", "Y2"),
+			Edge("Y3", "Z3"),
+			Edge("Z3", "Y3")
 		},
 		{0, 0, 0, 0, 0, 0, 0, 0, 1, 8},
 		{
@@ -399,15 +399,15 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[7] = generateGraph(
 		{"R", "W", "X1", "X2", "X3", "Y", "Z"},
 		{
-			edge("R", "W"),
-			edge("R", "Y"),
-			edge("W", "X1"),
-			edge("W", "X2"),
-			edge("W", "X3"),
-			edge("Y", "Z"),
-			edge("Z", "X3"),
-			edge("X3", "X2"),
-			edge("X2", "X1")
+			Edge("R", "W"),
+			Edge("R", "Y"),
+			Edge("W", "X1"),
+			Edge("W", "X2"),
+			Edge("W", "X3"),
+			Edge("Y", "Z"),
+			Edge("Z", "X3"),
+			Edge("X3", "X2"),
+			Edge("X2", "X1")
 		},
 		{0, 0, 0, 0, 0, 0, 5},
 		{
@@ -427,15 +427,15 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 	inputGraph[8] = generateGraph(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3"},
 		{
-			edge("R", "X1"),
-			edge("R", "Y1"),
-			edge("R", "Y2"),
-			edge("R", "Y3"),
-			edge("X1", "X2"),
-			edge("X2", "X3"),
-			edge("X3", "Y1"),
-			edge("X3", "Y2"),
-			edge("X3", "Y3")
+			Edge("R", "X1"),
+			Edge("R", "Y1"),
+			Edge("R", "Y2"),
+			Edge("R", "Y3"),
+			Edge("X1", "X2"),
+			Edge("X2", "X3"),
+			Edge("X3", "Y1"),
+			Edge("X3", "Y2"),
+			Edge("X3", "Y3")
 		},
 		{0, 0, 1, 2, 0, 0, 0},
 		{
