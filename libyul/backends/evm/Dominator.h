@@ -40,10 +40,10 @@ class Dominator
 {
 public:
 
-	Dominator(Vertex _entry, size_t _numVertices)
+	Dominator(Vertex _entry, size_t _numVertices):
+		m_vertex(_numVertices),
+		m_immediateDominator(lengauerTarjanDominator(_entry, _numVertices))
 	{
-		m_vertex = std::vector<Vertex>(_numVertices);
-		m_immediateDominator = lengauerTarjanDominator(_entry, _numVertices);
 		buildDominatorTree();
 	}
 
@@ -97,18 +97,18 @@ public:
 	{
 		solAssert(!m_vertex.empty());
 		// The entry node always dominates all other nodes
-		std::vector<Vertex> dominators = std::vector<Vertex>{m_vertex[0]};
+		std::vector<Vertex> dominators{m_vertex[0]};
 
 		size_t idomIdx = m_immediateDominator[m_vertexIndex[_v]];
 		if (idomIdx == 0)
-			return std::move(dominators);
+			return dominators;
 
 		while (idomIdx != 0)
 		{
 			dominators.emplace_back(m_vertex[idomIdx]);
 			idomIdx = m_immediateDominator[idomIdx];
 		}
-		return std::move(dominators);
+		return dominators;
 	}
 
 	void buildDominatorTree() {
