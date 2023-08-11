@@ -52,7 +52,7 @@ struct ImmediateDominatorTest
 	};
 
 	size_t numVertices;
-	Vertex* entry;
+	Vertex const* entry;
 	std::map<std::string, Vertex*> vertices;
 	std::vector<size_t> expectedIdom;
 	std::map<std::string, size_t> expectedDFSIndices;
