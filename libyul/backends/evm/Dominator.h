@@ -211,7 +211,7 @@ public:
 		// Process the vertices in decreasing order of the dfs number
 		for (auto it = m_vertex.rbegin(); it != m_vertex.rend(); ++it)
 		{
-			auto w = m_vertexIndex[*it];
+			Vertex const& w = m_vertexIndex[*it];
 			// step 3
 			// NOTE: this is an optimization, i.e. performing the step 3 before step 2.
 			// The goal is to process the bucket in the beginning of the loop for the vertex ``w``
@@ -230,7 +230,7 @@ public:
 			);
 
 			// step 2
-			for (auto v: predecessors[w])
+			for (size_t v: predecessors[w])
 			{
 				size_t u = eval(v);
 				if (semi[u] < semi[w])
