@@ -449,16 +449,16 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 		}
 	);
 
-	for (ImmediateDominatorTest const* g: inputGraph)
+	for (ImmediateDominatorTest const* test: inputGraph)
 	{
 		Dominator<
 			ImmediateDominatorTest::Vertex,
 			ImmediateDominatorTest::ForEachVertexSuccessorTest
-		> dom(*g->entry, g->numVertices);
+		> dominatorFinder(*test->entry, test->numVertices);
 
-		for (auto [v, idx]: dom.vertexIndices())
-			BOOST_CHECK(g->expectedDFSIndices.at(v.data) == idx);
-		BOOST_TEST(dom.immediateDominators() == g->expectedIdom);
+		for (auto [v, idx]: dominatorFinder.vertexIndices())
+			BOOST_CHECK(test->expectedDFSIndices.at(v.data) == idx);
+		BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
 	}
 
 }
