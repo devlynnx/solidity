@@ -133,7 +133,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_1, DominatorFixture)
 			Edge("D", "E"),
 			Edge("E", "F"),
 			Edge("G", "H"),
-			Edge("H", "F")
+			Edge("H", "F"),
 		},
 		{0, 0, 1, 1, 3, 1, 2, 6},
 		{
@@ -144,7 +144,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_1, DominatorFixture)
 			{"E", 4},
 			{"F", 5},
 			{"G", 6},
-			{"H", 7}
+			{"H", 7},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -174,7 +174,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
 			Edge("D", "F"),
 			Edge("E", "G"),
 			Edge("F", "G"),
-			Edge("G", "C")
+			Edge("G", "C"),
 		},
 		{0, 0, 0, 0, 0, 4, 4},
 		{
@@ -184,7 +184,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
 			{"G", 3},
 			{"D", 4},
 			{"E", 5},
-			{"F", 6}
+			{"F", 6},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -234,7 +234,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
 			Edge("G", "D"),
 			Edge("H", "G"),
 			Edge("I", "E"),
-			Edge("I", "H")
+			Edge("I", "H"),
 		},
 		{0, 0, 0, 0, 1, 1, 1, 1, 5},
 		{
@@ -246,7 +246,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
 			{"E", 5},
 			{"H", 6},
 			{"G", 7},
-			{"F", 8}
+			{"F", 8},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -297,7 +297,7 @@ BOOST_FIXTURE_TEST_CASE(langauer_tarjan_p122_fig1, DominatorFixture)
 			{"C", 9},
 			{"F", 10},
 			{"G", 11},
-			{"J", 12}
+			{"J", 12},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -328,7 +328,7 @@ BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
 			Edge("X5", "X6"),
 			Edge("X6", "X5"),
 			Edge("X6", "X7"),
-			Edge("X7", "X6")
+			Edge("X7", "X6"),
 		},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{
@@ -341,7 +341,7 @@ BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
 			{"X5", 6},
 			{"X6", 7},
 			{"X7", 8},
-			{"Y", 9}
+			{"Y", 9},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -380,7 +380,7 @@ BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
 			Edge("Z1", "Z2"),
 			Edge("Z2", "Z1"),
 			Edge("Z2", "Z3"),
-			Edge("Z3", "Z2")
+			Edge("Z3", "Z2"),
 		},
 		{0, 0, 0, 0, 0, 4, 5, 6, 7, 8, 0, 0, 0},
 		{
@@ -396,7 +396,7 @@ BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
 			{"Y3", 9},
 			{"Z1", 10},
 			{"Z2", 11},
-			{"Z3", 12}
+			{"Z3", 12},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -426,7 +426,7 @@ BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
 			Edge("Y2", "Z3"),
 			Edge("Z2", "Y2"),
 			Edge("Y3", "Z3"),
-			Edge("Z3", "Y3")
+			Edge("Z3", "Y3"),
 		},
 		{0, 0, 0, 0, 0, 0, 0, 0, 1, 8},
 		{
@@ -439,7 +439,7 @@ BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
 			{"Z3", 6},
 			{"Y3", 7},
 			{"X2", 8},
-			{"X3", 9}
+			{"X3", 9},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -463,7 +463,7 @@ BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
 			Edge("Y", "Z"),
 			Edge("Z", "X3"),
 			Edge("X3", "X2"),
-			Edge("X2", "X1")
+			Edge("X2", "X1"),
 		},
 		{0, 0, 0, 0, 0, 0, 5},
 		{
@@ -473,7 +473,7 @@ BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
 			{"X2", 3},
 			{"X3", 4},
 			{"Y", 5},
-			{"Z", 6}
+			{"Z", 6},
 		}
 	);
 	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
@@ -497,7 +497,7 @@ BOOST_FIXTURE_TEST_CASE(sncaworst, DominatorFixture)
 			Edge("X2", "X3"),
 			Edge("X3", "Y1"),
 			Edge("X3", "Y2"),
-			Edge("X3", "Y3")
+			Edge("X3", "Y3"),
 		},
 		{0, 0, 1, 2, 0, 0, 0},
 		{
