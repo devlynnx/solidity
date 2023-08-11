@@ -47,22 +47,22 @@ public:
 		buildDominatorTree();
 	}
 
-	std::vector<Vertex> vertices() const
+	std::vector<Vertex> const& vertices() const
 	{
 		return m_vertex;
 	}
 
-	std::map<Vertex, size_t> vertexIndices() const
+	std::map<Vertex, size_t> const& vertexIndices() const
 	{
 		return m_vertexIndex;
 	}
 
-	std::vector<size_t> immediateDominators() const
+	std::vector<size_t> const& immediateDominators() const
 	{
 		return m_immediateDominator;
 	}
 
-	std::map<size_t, std::vector<size_t>> dominatorTree() const
+	std::map<size_t, std::vector<size_t>> const& dominatorTree() const
 	{
 		return m_dominatorTree;
 	}
