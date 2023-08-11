@@ -28,12 +28,12 @@ namespace solidity::yul::test
 struct ImmediateDominatorTest
 {
 	struct Vertex {
-		std::string data;
+		std::string name;
 		std::vector<Vertex*> successors;
 
 		bool operator<(Vertex const& _other) const
 		{
-			return data < _other.data;
+			return name < _other.name;
 		}
 	};
 
@@ -457,7 +457,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator, DominatorFixture)
 		> dominatorFinder(*test->entry, test->numVertices);
 
 		for (auto const&[v, idx]: dominatorFinder.vertexIndices())
-			BOOST_CHECK(test->expectedDFSIndices.at(v.data) == idx);
+			BOOST_CHECK(test->expectedDFSIndices.at(v.name) == idx);
 		BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
 	}
 }
