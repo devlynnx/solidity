@@ -111,7 +111,8 @@ public:
 		return dominators;
 	}
 
-	void buildDominatorTree() {
+	void buildDominatorTree()
+	{
 		solAssert(!m_vertex.empty());
 		solAssert(!m_immediateDominator.empty());
 
