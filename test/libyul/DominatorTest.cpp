@@ -51,8 +51,31 @@ struct ForEachVertexSuccessorTest {
 
 struct ImmediateDominatorTest
 {
-	size_t numVertices;
-	std::shared_ptr<Vertex> entry;
+	ImmediateDominatorTest(
+		std::vector<std::string> _vertices,
+		std::vector<Edge> _edges,
+		std::vector<size_t> _expectedIdom,
+		std::map<std::string, size_t> _expectedDFSIndices
+	)
+	{
+		soltestAssert(!_vertices.empty() && !_edges.empty());
+
+		for (std::string name: _vertices)
+			vertices.insert(make_pair(name, std::make_shared<Vertex>(Vertex{name, std::vector<std::shared_ptr<Vertex>>{}})));
+
+		soltestAssert(vertices.size() == _vertices.size());
+
+		for (auto const& [from, to]: _edges)
+			vertices[from]->successors.push_back(vertices[to]);
+
+		entry = vertices[_vertices[0]];
+		numVertices = _vertices.size();
+		expectedIdom = _expectedIdom;
+		expectedDFSIndices = _expectedDFSIndices;
+	}
+
+	size_t numVertices = 0;
+	std::shared_ptr<Vertex> entry = nullptr;
 	std::map<std::string, std::shared_ptr<Vertex>> vertices;
 	std::vector<size_t> expectedIdom;
 	std::map<std::string, size_t> expectedDFSIndices;
@@ -61,31 +84,6 @@ struct ImmediateDominatorTest
 class DominatorFixture
 {
 protected:
-	static std::shared_ptr<ImmediateDominatorTest> prepareTestDefinition(
-		std::vector<std::string> _vertices,
-		std::vector<Edge> _edges,
-		std::vector<size_t> _expectedIdom,
-		std::map<std::string, size_t> _expectedDFSIndices
-	)
-	{
-		soltestAssert(!_edges.empty());
-
-		std::shared_ptr<ImmediateDominatorTest> test(new ImmediateDominatorTest());
-		for (std::string name: _vertices)
-			test->vertices.insert(make_pair(name, std::make_shared<Vertex>(Vertex{name, std::vector<std::shared_ptr<Vertex>>{}})));
-		test->entry = test->vertices[_vertices[0]];
-
-		soltestAssert(!_vertices.empty() && _vertices.size() == test->vertices.size());
-
-		test->numVertices = _vertices.size();
-		for (auto const& [from, to]: _edges)
-			test->vertices[from]->successors.push_back(test->vertices[to]);
-
-		test->expectedIdom = _expectedIdom;
-		test->expectedDFSIndices = _expectedDFSIndices;
-		return test;
-	}
-
 	std::map<std::string, size_t> toDFSIndices(std::map<Vertex, size_t> const& _vertexIndices)
 	{
 		auto convertIndex = [](std::pair<Vertex, size_t> const& _pair) -> std::pair<std::string, size_t>
@@ -117,7 +115,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_1, DominatorFixture)
 	//        E       H
 	//        │       │
 	//        └──►F◄──┘
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"A", "B", "C", "D", "E", "F", "G", "H"},
 		{
 			Edge("A", "B"),
@@ -142,9 +140,9 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_1, DominatorFixture)
 			{"H", 7},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
@@ -157,7 +155,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
 	//    └─C◄───┐  E     F
 	//      │    │  │     │
 	//      └───►G◄─┴─────┘
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"A", "B", "C", "D", "E", "F", "G"},
 		{
 			Edge("A", "B"),
@@ -182,9 +180,9 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
 			{"F", 6},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
@@ -210,7 +208,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
 	//    │     └─────┴─G◄─┴──────┘
 	//    │             │
 	//    └─────────────┘
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
 		{
 			Edge("A", "B"),
@@ -244,16 +242,16 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
 			{"F", 8},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(langauer_tarjan_p122_fig1, DominatorFixture)
 {
 	// T. Lengauer and R. E. Tarjan pg. 122 fig. 1
 	// ref: https://www.cs.princeton.edu/courses/archive/spr03/cs423/download/dominators.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "K"},
 		{
 			Edge("R", "B"),
@@ -295,9 +293,9 @@ BOOST_FIXTURE_TEST_CASE(langauer_tarjan_p122_fig1, DominatorFixture)
 			{"J", 12},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
@@ -305,7 +303,7 @@ BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
 	// Extracted from Loukas Georgiadis Dissertation - Linear-Time Algorithms for Dominators and Related Problems
 	// pg. 12 Fig. 2.2
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "W", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Y"},
 		{
 			Edge("R", "W"),
@@ -339,9 +337,9 @@ BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
 			{"Y", 9},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
@@ -349,7 +347,7 @@ BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example itworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "W1", "W2", "W3", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			Edge("R", "W1"),
@@ -394,9 +392,9 @@ BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
 			{"Z3", 12},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
@@ -404,7 +402,7 @@ BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example idfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			Edge("R", "X1"),
@@ -437,9 +435,9 @@ BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
 			{"X3", 9},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
@@ -447,7 +445,7 @@ BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example ibfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "W", "X1", "X2", "X3", "Y", "Z"},
 		{
 			Edge("R", "W"),
@@ -471,9 +469,9 @@ BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
 			{"Z", 6},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_FIXTURE_TEST_CASE(sncaworst, DominatorFixture)
@@ -481,7 +479,7 @@ BOOST_FIXTURE_TEST_CASE(sncaworst, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example sncaworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
+	ImmediateDominatorTest test(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3"},
 		{
 			Edge("R", "X1"),
@@ -505,9 +503,9 @@ BOOST_FIXTURE_TEST_CASE(sncaworst, DominatorFixture)
 			{"Y3", 6},
 		}
 	);
-	DominatorFinder dominatorFinder(*test->entry, test->numVertices);
-	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test->expectedDFSIndices);
-	BOOST_TEST(dominatorFinder.immediateDominators() == test->expectedIdom);
+	DominatorFinder dominatorFinder(*test.entry, test.numVertices);
+	BOOST_TEST(toDFSIndices(dominatorFinder.vertexIndices()) == test.expectedDFSIndices);
+	BOOST_TEST(dominatorFinder.immediateDominators() == test.expectedIdom);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
