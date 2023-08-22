@@ -32,7 +32,7 @@ struct ImmediateDominatorTest
 {
 	struct Vertex {
 		std::string name;
-		std::vector<Vertex*> successors;
+		std::vector<std::shared_ptr<Vertex>> successors;
 
 		bool operator<(Vertex const& _other) const
 		{
@@ -52,8 +52,8 @@ struct ImmediateDominatorTest
 	};
 
 	size_t numVertices;
-	Vertex const* entry;
-	std::map<std::string, Vertex*> vertices;
+	std::shared_ptr<Vertex> entry;
+	std::map<std::string, std::shared_ptr<Vertex>> vertices;
 	std::vector<size_t> expectedIdom;
 	std::map<std::string, size_t> expectedDFSIndices;
 };
@@ -62,7 +62,7 @@ class DominatorFixture
 {
 	typedef ImmediateDominatorTest::Vertex Vertex;
 protected:
-	static ImmediateDominatorTest const* prepareTestDefinition(
+	static std::shared_ptr<ImmediateDominatorTest> prepareTestDefinition(
 		std::vector<std::string> _vertices,
 		std::vector<ImmediateDominatorTest::Edge> _edges,
 		std::vector<size_t> _expectedIdom,
@@ -71,9 +71,9 @@ protected:
 	{
 		soltestAssert(!_edges.empty());
 
-		ImmediateDominatorTest* test = new ImmediateDominatorTest();
+		std::shared_ptr<ImmediateDominatorTest> test(new ImmediateDominatorTest());
 		for (std::string name: _vertices)
-			test->vertices.insert(make_pair(name, new Vertex{name, std::vector<Vertex*>{}}));
+			test->vertices.insert(make_pair(name, std::make_shared<Vertex>(Vertex{name, std::vector<std::shared_ptr<Vertex>>{}})));
 		test->entry = test->vertices[_vertices[0]];
 
 		soltestAssert(!_vertices.empty() && _vertices.size() == test->vertices.size());
@@ -122,7 +122,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_1, DominatorFixture)
 	//        E       H
 	//        │       │
 	//        └──►F◄──┘
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"A", "B", "C", "D", "E", "F", "G", "H"},
 		{
 			Edge("A", "B"),
@@ -162,7 +162,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_2, DominatorFixture)
 	//    └─C◄───┐  E     F
 	//      │    │  │     │
 	//      └───►G◄─┴─────┘
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"A", "B", "C", "D", "E", "F", "G"},
 		{
 			Edge("A", "B"),
@@ -215,7 +215,7 @@ BOOST_FIXTURE_TEST_CASE(immediate_dominator_3, DominatorFixture)
 	//    │     └─────┴─G◄─┴──────┘
 	//    │             │
 	//    └─────────────┘
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"A", "B", "C", "D", "E", "F", "G", "H", "I"},
 		{
 			Edge("A", "B"),
@@ -258,7 +258,7 @@ BOOST_FIXTURE_TEST_CASE(langauer_tarjan_p122_fig1, DominatorFixture)
 {
 	// T. Lengauer and R. E. Tarjan pg. 122 fig. 1
 	// ref: https://www.cs.princeton.edu/courses/archive/spr03/cs423/download/dominators.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "L", "K"},
 		{
 			Edge("R", "B"),
@@ -310,7 +310,7 @@ BOOST_FIXTURE_TEST_CASE(loukas_georgiadis, DominatorFixture)
 	// Extracted from Loukas Georgiadis Dissertation - Linear-Time Algorithms for Dominators and Related Problems
 	// pg. 12 Fig. 2.2
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "W", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Y"},
 		{
 			Edge("R", "W"),
@@ -354,7 +354,7 @@ BOOST_FIXTURE_TEST_CASE(itworst, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example itworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "W1", "W2", "W3", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			Edge("R", "W1"),
@@ -409,7 +409,7 @@ BOOST_FIXTURE_TEST_CASE(idfsquad, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example idfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3", "Z1", "Z2", "Z3"},
 		{
 			Edge("R", "X1"),
@@ -452,7 +452,7 @@ BOOST_FIXTURE_TEST_CASE(ibsfquad, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example ibfsquad(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "W", "X1", "X2", "X3", "Y", "Z"},
 		{
 			Edge("R", "W"),
@@ -486,7 +486,7 @@ BOOST_FIXTURE_TEST_CASE(sncaworst, DominatorFixture)
 	// Worst-case families for k = 3
 	// Example sncaworst(3) pg. 26 fig. 2.9
 	// ref: https://www.cs.princeton.edu/techreports/2005/737.pdf
-	ImmediateDominatorTest const* test = prepareTestDefinition(
+	std::shared_ptr<ImmediateDominatorTest> test = prepareTestDefinition(
 		{"R", "X1", "X2", "X3", "Y1", "Y2", "Y3"},
 		{
 			Edge("R", "X1"),
