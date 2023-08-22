@@ -28,29 +28,29 @@ using namespace solidity::yul;
 namespace solidity::yul::test
 {
 
+typedef std::pair<std::string, std::string> Edge;
+
+struct Vertex {
+	std::string name;
+	std::vector<std::shared_ptr<Vertex>> successors;
+
+	bool operator<(Vertex const& _other) const
+	{
+		return name < _other.name;
+	}
+};
+
+struct ForEachVertexSuccessorTest {
+	template<typename Callable>
+	void operator()(Vertex _v, Callable&& _callable) const
+	{
+		for (auto const& w: _v.successors)
+			_callable(*w);
+	}
+};
+
 struct ImmediateDominatorTest
 {
-	struct Vertex {
-		std::string name;
-		std::vector<std::shared_ptr<Vertex>> successors;
-
-		bool operator<(Vertex const& _other) const
-		{
-			return name < _other.name;
-		}
-	};
-
-	typedef std::pair<std::string, std::string> Edge;
-
-	struct ForEachVertexSuccessorTest {
-		template<typename Callable>
-		void operator()(Vertex _v, Callable&& _callable) const
-		{
-			for (auto const& w: _v.successors)
-				_callable(*w);
-		}
-	};
-
 	size_t numVertices;
 	std::shared_ptr<Vertex> entry;
 	std::map<std::string, std::shared_ptr<Vertex>> vertices;
@@ -60,11 +60,10 @@ struct ImmediateDominatorTest
 
 class DominatorFixture
 {
-	typedef ImmediateDominatorTest::Vertex Vertex;
 protected:
 	static std::shared_ptr<ImmediateDominatorTest> prepareTestDefinition(
 		std::vector<std::string> _vertices,
-		std::vector<ImmediateDominatorTest::Edge> _edges,
+		std::vector<Edge> _edges,
 		std::vector<size_t> _expectedIdom,
 		std::map<std::string, size_t> _expectedDFSIndices
 	)
@@ -97,11 +96,7 @@ protected:
 	}
 };
 
-typedef ImmediateDominatorTest::Edge Edge;
-typedef Dominator<
-	ImmediateDominatorTest::Vertex,
-	ImmediateDominatorTest::ForEachVertexSuccessorTest
-> DominatorFinder;
+typedef Dominator<Vertex, ForEachVertexSuccessorTest> DominatorFinder;
 
 BOOST_AUTO_TEST_SUITE(Dominators)
 
