@@ -33,7 +33,9 @@ class SolidityCompilerFixture: protected AnalysisFramework
 {
 	void setupCompiler(CompilerStack& _compiler) override
 	{
-		_compiler.setOptimiserSettings(solidity::test::CommonOptions::get().optimize);
+		// FIXME: This test was probably supposed to respect CommonOptions::get().optimize but
+		// due to a bug it was always running with optimizer disabled and it does not pass with it.
+		_compiler.setOptimiserSettings(false);
 	}
 };
 
