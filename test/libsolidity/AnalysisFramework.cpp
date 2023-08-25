@@ -52,7 +52,7 @@ pair<SourceUnit const*, ErrorList> AnalysisFramework::runAnalysisAndExpectNoPars
 {
 	runFramework(_addPreamble ? withPreamble(_source) : _source, PipelineStage::Analysis);
 
-	if (!stageSuccessful(PipelineStage::Analysis) && stageSuccessful(PipelineStage::Parsing))
+	if (!stageSuccessful(PipelineStage::Parsing))
 		BOOST_FAIL("Parsing contract failed in analysis test suite:" + formatErrors(m_compiler->errors()));
 
 	ErrorList errors = filteredErrors(_includeWarningsAndInfos);
