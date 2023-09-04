@@ -1,4 +1,4 @@
-.. index:: abi, application binary interface
+/***/.. index:: abi, application binary interface
 
 .. _ABI:
 
